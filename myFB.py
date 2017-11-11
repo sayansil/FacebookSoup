@@ -4,6 +4,8 @@ import codecs
 import re
 from time import strftime as stime
 import os
+import sys
+import getpass
 
 URL = "https://www.facebook.com"
 image_dir = "local_images"
@@ -49,6 +51,7 @@ def create_local_image(mail=example_mail, password=example_pw):
     redirect = facebook_login(mail, password)
     
     if redirect == False:
+    	print("Failed.")
         return
     
     if not os.path.exists(image_dir):
@@ -61,3 +64,30 @@ def create_local_image(mail=example_mail, password=example_pw):
     f.close()
     
     print("Account loaded locally.")
+
+def main():
+	if(len(sys.argv) == 3):
+		_mail = sys.argv[1]
+		_pw = sys.argv[2]
+
+		if((not _mail) or (not _pw)):
+			print("Invalid Parameters. Enter again.")
+			_mail = input()
+			_pw = input()
+		create_local_image(mail=_mail, password=_pw)
+
+	elif(len(sys.argv) == 2):
+		_mail = sys.argv[1]
+
+		if(not _mail):
+			print("Invalid Parameters. Enter again.")
+			_mail = input()
+
+		_pw = getpass.getpass("Enter password:")
+		create_local_image(mail=_mail, password=_pw)
+
+	else:
+		create_local_image()
+
+if __name__ == '__main__':
+	main()
