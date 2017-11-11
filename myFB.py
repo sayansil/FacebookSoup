@@ -1,12 +1,3 @@
-from bs4 import BeautifulSoup
-import requests
-import codecs
-import re
-from time import strftime as stime
-import os
-import sys
-import getpass
-
 URL = "https://www.facebook.com"
 image_dir = "local_images"
 
@@ -14,6 +5,47 @@ example_mail = "example.id@mail.com"
 example_pw = "password"
 
 local_pagename = example_mail + "_00-00-0000_00-00-00" + ".html"
+
+def import_packages():
+	global BeautifulSoup
+	global requests
+	global codecs
+	global re
+	global stime
+	global os
+	global sys
+	global getpass
+	global pip
+
+	try:
+		import pip
+	except:
+		print("pip not install. Cannot load new packages")
+		sys.exit()
+
+	try:
+		import getpass
+		import codecs
+		import re
+		from time import strftime as stime
+		import os
+		import sys
+	except:
+		print("Python 3.5 or higher required.")
+		sys.exit()
+
+	try:
+		from bs4 import BeautifulSoup
+	except:
+		print("Installing BeautifulSoup")
+		pip.main(['install', 'beautifulsoup4'])
+
+	try:
+		import requests
+	except:
+		print("Installing requests")
+		pip.main(['install', 'requests'])
+
 
 def facebook_login(mail=example_mail, password=example_pw):
     s = requests.Session()
@@ -52,7 +84,7 @@ def create_local_image(mail=example_mail, password=example_pw):
     
     if redirect == False:
     	print("Failed.")
-        return
+    	return
     
     if not os.path.exists(image_dir):
         os.makedirs(image_dir)
@@ -66,6 +98,10 @@ def create_local_image(mail=example_mail, password=example_pw):
     print("Account loaded locally.")
 
 def main():
+	import_packages()
+
+	_ = os.system('cls') 
+	
 	if(len(sys.argv) == 3):
 		_mail = sys.argv[1]
 		_pw = sys.argv[2]
